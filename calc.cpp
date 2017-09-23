@@ -12,7 +12,7 @@ void Register::add(int v) { value += v; }
 void Register::sub(int v) { value -= v; }
 void Register::reset() { value = 0; }
 
-bool parse_line (std::string const &line,
+bool parse_line (const std::string &line,
                  char &cmd, int &arg, std::string &err_msg) {
 
     std::istringstream input(line);
