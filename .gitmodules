@@ -1,0 +1,4 @@
+[submodule "doctest"]
+	path = doctest
+	url = https://github.com/onqtam/doctest
+	branch = master

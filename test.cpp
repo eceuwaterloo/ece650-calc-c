@@ -1,84 +1,88 @@
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest/doctest/doctest.h"
 
 #include "calc.hpp"
 
 // https://github.com/google/googletest/blob/master/googletest/docs/Primer.md
 
 // Simple test, does not use gmock
-TEST(Register, CalcTest)
+TEST_CASE("Register Test")
 {
     Register reg;
-    EXPECT_EQ(reg.get(), 0);
+    CHECK(reg.get() == 0);
     reg.add(1);
-    EXPECT_EQ(reg.get(), 1);
+    CHECK(reg.get() == 1);
     reg.sub(3);
-    EXPECT_EQ(reg.get(), -2);
+    CHECK(reg.get() == -2);
     reg.reset();
-    EXPECT_EQ(reg.get(), 0);
+    CHECK(reg.get() == 0);
 }
 
-TEST(Parser, CalcTest)
+TEST_CASE("Parser Correct")
 {
-    char cmd;
-    int arg;
+    char cmd = 0;
+    int arg = 0;
     std::string err_msg;
 
-    // initialize local variables
-    cmd = 0;
-    arg = 0;
+    CHECK(parse_line ("+ 10", cmd, arg, err_msg));
+    CHECK(cmd == '+');
+    CHECK(arg == 10);
 
-    EXPECT_TRUE(parse_line ("+ 10", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, '+');
-    EXPECT_EQ(arg, 10);
-
-    EXPECT_TRUE(parse_line ("- 10", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, '-');
-    EXPECT_EQ(arg, 10);
+    CHECK(parse_line ("- 10", cmd, arg, err_msg));
+    CHECK(cmd == '-');
+    CHECK(arg == 10);
 
     arg = 42;
-    EXPECT_TRUE(parse_line ("=", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, '=');
+    CHECK(parse_line ("=", cmd, arg, err_msg));
+    CHECK(cmd == '=');
     // test that arg is not changed
-    EXPECT_EQ(arg, 42);
+    CHECK(arg == 42);
 
     arg = 42;
-    EXPECT_TRUE(parse_line ("c", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, 'c');
+    CHECK(parse_line ("c", cmd, arg, err_msg));
+    CHECK(cmd == 'c');
     // test that arg is not changed
-    EXPECT_EQ(arg, 42);
+    CHECK(arg == 42);
+}
 
-    cmd = 0;
-    arg = 42;
-    EXPECT_FALSE(parse_line ("c 20", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, 0);
-    // test that arg is not changed
-    EXPECT_EQ(arg, 42);
-    EXPECT_EQ(err_msg, "Unexpected argument");
+TEST_CASE("Parser Errors")
+{
+    char cmd = 0;
+    int arg = 0;
+    std::string err_msg;
 
-    cmd = 0;
-    arg = 42;
-    EXPECT_FALSE(parse_line ("+ 20 34", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, 0);
+    CHECK(parse_line ("c 20", cmd, arg, err_msg) == false);
+    CHECK(cmd == 0);
     // test that arg is not changed
-    EXPECT_EQ(arg, 42);
-    EXPECT_EQ(err_msg, "Unexpected argument");
+    CHECK(arg == 0);
+    CHECK(err_msg == "Unexpected argument");
 
     cmd = 0;
     arg = 42;
-    EXPECT_FALSE(parse_line ("+ ten", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, 0);
+    CHECK(parse_line ("+ 20 34", cmd, arg, err_msg) == false);
+    CHECK(cmd == 0);
     // test that arg is not changed
-    EXPECT_EQ(arg, 42);
-    EXPECT_EQ(err_msg, "Missing or bad argument");
+    CHECK(arg == 42);
+    CHECK(err_msg == "Unexpected argument");
 
     cmd = 0;
     arg = 42;
-    EXPECT_FALSE(parse_line ("w ten", cmd, arg, err_msg));
-    EXPECT_EQ(cmd, 0);
+    CHECK(parse_line ("+ ten", cmd, arg, err_msg) == false);
+    CHECK(cmd == 0);
     // test that arg is not changed
-    EXPECT_EQ(arg, 42);
-    EXPECT_EQ(err_msg, "Unknown command");
+    CHECK(arg == 42);
+    CHECK(err_msg == "Missing or bad argument");
 
+    cmd = 0;
+    arg = 42;
+    CHECK(parse_line ("w ten", cmd, arg, err_msg) == false);
+    CHECK(cmd == 0);
+    // test that arg is not changed
+    CHECK(arg == 42);
+    CHECK(err_msg == "Unknown command");
+}
 
+TEST_CASE("Failing Test Examples")
+{
+    CHECK(true == false);
 }
