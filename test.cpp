@@ -3,9 +3,8 @@
 
 #include "calc.hpp"
 
-// https://github.com/google/googletest/blob/master/googletest/docs/Primer.md
+// https://github.com/onqtam/doctest/blob/master/doc/markdown/tutorial.md
 
-// Simple test, does not use gmock
 TEST_CASE("Register Test")
 {
     Register reg;
