@@ -12,9 +12,4 @@ set (CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 add_executable(calc main.cpp calc.cpp)
 
 # create the executable for tests
-enable_testing()
 add_executable(tests test.cpp calc.cpp)
-add_test(NAME CalcTests COMMAND tests)
-
-# make ctest show errors upon test failure
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure DEPENDS tests)
