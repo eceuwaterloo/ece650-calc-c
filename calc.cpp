@@ -18,7 +18,7 @@ bool parse_line (const std::string &line,
     std::istringstream input(line);
 
     // remove whitespace
-    ws(input);
+    std::ws(input);
 
     if (input.eof()) {
         err_msg = "Empty command";
